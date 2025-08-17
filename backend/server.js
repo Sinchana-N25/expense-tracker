@@ -1,3 +1,4 @@
+const dns = require("dns");
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
@@ -16,6 +17,8 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
+
+dns.setServers(["8.8.8.8", "8.8.4.4"]);
 
 app.use(express.json());
 
