@@ -1,8 +1,44 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axiosInstance from "../../utils/axiosInstance";
+import { API_PATHS } from "../../utils/apiPaths";
+import { UserContext } from "../../context/userContext";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+
+  const { updateUser } = useContext(UserContext);
+
+  const navigate = useNavigate();
+
+  //Handle Login Form Submit
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    //Login API call
+    try {
+      const response = await axiosInstance.post(API_PATHS.AUTH.LOGIN, {
+        email,
+        password,
+      });
+      const { token, user } = response.data;
+
+      if (token) {
+        localStorage.setItem("token", token);
+        updateUser(user);
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError("Something went wrong. Please try again.");
+      }
+    }
+  };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
@@ -13,7 +49,7 @@ const Login = () => {
         <p className="text-sm text-gray-600 mt-2 mb-6 text-center">
           Please enter your details to log in
         </p>
-        <form>
+        <form onSubmit={handleLogin}>
           <div className="mb-4">
             <label
               className="block text-gray-700 text-sm font-bold mb-2"
@@ -22,6 +58,8 @@ const Login = () => {
               Email Address
             </label>
             <input
+              value={email}
+              onChange={({ target }) => setEmail(target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline placeholder-xs"
               id="email"
               type="email"
@@ -36,6 +74,8 @@ const Login = () => {
               Password
             </label>
             <input
+              value={password}
+              onChange={({ target }) => setPassword(target.value)}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline pr-10 placeholder-xs"
               id="password"
               type={showPassword ? "text" : "password"}
