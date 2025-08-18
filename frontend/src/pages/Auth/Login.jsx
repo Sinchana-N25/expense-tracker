@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axiosInstance from "../../utils/axiosInstance";
 import { API_PATHS } from "../../utils/apiPaths";
 import { UserContext } from "../../context/userContext";
+import { validateEmail } from "../../utils/helper";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -17,6 +18,18 @@ const Login = () => {
   //Handle Login Form Submit
   const handleLogin = async (e) => {
     e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email adress.");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter the password.");
+      return;
+    }
+
+    setError("");
 
     //Login API call
     try {
@@ -113,6 +126,9 @@ const Login = () => {
               )}
             </span>
           </div>
+
+          {error && <p className="text-red-500 text-xs pb-2.5">{error}</p>}
+
           <div className="flex items-center justify-between mb-6">
             <button
               className="bg-teal-500 hover:bg-teal-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full cursor-pointer"
