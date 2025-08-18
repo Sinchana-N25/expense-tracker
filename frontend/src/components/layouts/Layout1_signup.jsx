@@ -20,7 +20,7 @@ const Layout1_signup = () => {
                 className="block text-gray-700 text-sm font-bold mb-2"
                 htmlFor="firstName"
               >
-                First Name
+                Full Name
               </label>
               <input
                 // value={fullName}
