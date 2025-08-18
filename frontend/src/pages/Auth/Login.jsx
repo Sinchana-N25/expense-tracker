@@ -35,12 +35,16 @@ const Login = () => {
         email,
         password,
       });
+      console.log("Login API response:", response.data);
       const { token, user } = response.data;
 
-      if (token) {
+      if (token && user) {
         localStorage.setItem("token", token);
+        localStorage.setItem("user", JSON.stringify(user));
         updateUser(user);
         navigate("/dashboard");
+      } else {
+        setError("Something went wrong. Please try again.");
       }
     } catch (error) {
       if (error.response && error.response.data.message) {

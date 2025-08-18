@@ -15,7 +15,7 @@ axiosInstance.interceptors.request.use(
   (config) => {
     const accessToken = localStorage.getItem("token");
     if (accessToken) {
-      config.headers.Authorization = "Bearer ${accessToken}";
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
@@ -32,8 +32,9 @@ axiosInstance.interceptors.response.use(
   (error) => {
     //Handle common errors globally
     if (error.response) {
+      console.error("API Error:", error.response.data.message || error.message);
       //Redirect to login page
-      window.location.href = "/login";
+      // window.location.href = "/login";
     } else if (error.code === "ECONNABORATED") {
       console.error("Request timeout. Please try again.");
     }
