@@ -41,4 +41,8 @@
 .add-btn-fill {
   @apply text-white bg-primary;
 }
-/* secondary colour- #EF863E */
+
+/* Make the calendar icon in date inputs show pointer on hover */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+}

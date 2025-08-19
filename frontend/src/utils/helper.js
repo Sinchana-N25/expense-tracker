@@ -17,14 +17,16 @@ export const addThousandsSeparator = (num) => {
 };
 
 export const prepareExpenseBarChartData = (data = []) => {
-  const chartData = data.map((item) => ({
-    category: item?.category,
-    amount: item?.amount,
-  }));
-
-  return chartData;
+  return data.map((item) => {
+    const dateObj = new Date(item.date); // parse ISO date
+    const month = dateObj.toLocaleString("default", { month: "short" }); // e.g., "Aug"
+    return {
+      month, // X-axis key expected by CustomBarChart
+      category: item.category, // Tooltip
+      amount: item.amount, // Bar height
+    };
+  });
 };
-
 export const prepareIncomeBarChartData = (data = []) => {
   const sortedData = [...data].sort(
     (a, b) => new Date(a.date) - new Date(b.date)

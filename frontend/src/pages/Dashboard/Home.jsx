@@ -34,6 +34,7 @@ const Home = () => {
       );
 
       if (response.data) {
+        console.log("Dashboard API response:", response.data);
         setDashboardData(response.data);
       }
     } catch (error) {
@@ -70,7 +71,7 @@ const Home = () => {
           <InfoCard
             icon={<LuHandCoins />}
             label="Total Expense"
-            value={addThousandsSeparator(dashboardData?.totalExpense || 0)}
+            value={addThousandsSeparator(dashboardData?.totalExpenses || 0)}
             color="bg-red-500"
           />
         </div>
@@ -84,7 +85,7 @@ const Home = () => {
           <FinanceOverview
             totalBalance={dashboardData?.totalBalance || 0}
             totalIncome={dashboardData?.totalIncome || 0}
-            totalExpense={dashboardData?.totalExpense || 0}
+            totalExpense={dashboardData?.totalExpenses || 0}
           />
 
           <ExpenseTransactions

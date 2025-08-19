@@ -10,7 +10,6 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import CustomToolTip from "./CustomToolTip";
 
 const CustomBarChart = ({ data }) => {
   //Function to alternate colors
@@ -26,7 +25,10 @@ const CustomBarChart = ({ data }) => {
             {payload[0].payload.category}
           </p>
           <p className="text-sm text-gray-600">
-            Amount: <span className="text-sm font-medium text-gray"></span>
+            Amount:{" "}
+            <span className="text-sm font-medium text-gray">
+              ₹{payload[0].value}
+            </span>
           </p>
         </div>
       );
