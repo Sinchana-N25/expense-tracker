@@ -8,6 +8,7 @@ import ExpenseOverview from "../../components/Expense/ExpenseOverview";
 import AddExpenseForm from "../../components/Expense/AddExpenseForm";
 import Modal from "../../components/Modal";
 import ExpenseList from "../../components/Expense/ExpenseList";
+import DeleteAlert from "../../components/DeleteAlert";
 
 const Expense = () => {
   useUserAuth();
@@ -129,7 +130,7 @@ const Expense = () => {
   }, []);
 
   return (
-    <DashboardLayout activeMenu="Income">
+    <DashboardLayout activeMenu="Expense">
       <div className="my-5 mx-auto">
         <div className="grid grid-cols-1 gap-6">
           <div className="">
