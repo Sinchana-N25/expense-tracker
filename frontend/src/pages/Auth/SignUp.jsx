@@ -74,52 +74,30 @@ const Signup = () => {
         </p>
 
         <form onSubmit={handleSignup}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="fullName"
-            >
-              Full Name
-            </label>
-            <input
-              id="fullName"
+          <div className="mb-6">
+            <PasswordInput
+              label="Full Name"
               type="text"
-              placeholder="Your full name"
-              className="shadow appearance-none border rounded w-full py-2 px-3 
-                         text-gray-700 leading-tight focus:outline-none 
-                         focus:shadow-outline placeholder-xs"
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
+              placeholder="Your Name"
             />
           </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
+          <div className="mb-6">
+            <PasswordInput
+              label="Email Address"
               type="text"
-              placeholder="Your email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 
-                         text-gray-700 leading-tight focus:outline-none 
-                         focus:shadow-outline placeholder-xs"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
             />
           </div>
 
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
+          <div className="mb-6">
             <PasswordInput
+              label="Password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Min 8 characters"
@@ -127,13 +105,9 @@ const Signup = () => {
           </div>
 
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="confirmPassword"
-            >
-              Confirm Password
-            </label>
             <PasswordInput
+              label="Confirm Password"
+              type="password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               placeholder="Re-enter your password"

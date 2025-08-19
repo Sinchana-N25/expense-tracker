@@ -61,38 +61,25 @@ const Login = () => {
         <h3 className="text-2xl font-semibold text-gray-800 text-center">
           Welcome Back
         </h3>
-        <p className="text-sm text-gray-600 mt-2 mb-6 text-center">
+        <p className="text-sm text-gray-600 mt-2 mb-8 text-center">
           Please enter your details to log in
         </p>
 
         <form onSubmit={handleLogin}>
-          <div className="mb-4">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="email"
-            >
-              Email Address
-            </label>
-            <input
-              id="email"
+          <div className="mb-6">
+            <PasswordInput
+              label="Email Address"
               type="text"
-              placeholder="Your email"
-              className="shadow appearance-none border rounded w-full py-2 px-3 
-                         text-gray-700 text-sm leading-tight focus:outline-none 
-                         focus:shadow-outline placeholder-xs"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              placeholder="Your email"
             />
           </div>
 
           <div className="mb-6">
-            <label
-              className="block text-gray-700 text-sm font-bold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
             <PasswordInput
+              label="Password"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="Min 8 characters"

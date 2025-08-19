@@ -1,36 +1,48 @@
 import React, { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
-const PasswordInput = ({ value, onChange, placeholder }) => {
-  const [isShowPassword, setisShowPassword] = useState(false);
+const PasswordInput = ({ value, onChange, placeholder, label, type }) => {
+  const [showPassword, setShowPassword] = useState(false);
 
-  const toggleShowPassword = () => {
-    setisShowPassword(!isShowPassword);
-  };
+  const toggleShowPassword = () => setShowPassword((prev) => !prev);
 
   return (
-    <div className="shadow flex items-center bg-transparent border px-2 rounded mb-3">
-      <input
-        value={value}
-        onChange={onChange}
-        type={isShowPassword ? "text" : "password"}
-        placeholder={placeholder || "Password"}
-        className="w-full text-gray-700 text-[12.5px] bg-transparent py-3 mr-3 rounded outline-none"
-      />
-
-      {isShowPassword ? (
-        <FaRegEye
-          size={22}
-          className="text-primary cursor-pointer"
-          onClick={() => toggleShowPassword()}
-        />
-      ) : (
-        <FaRegEyeSlash
-          size={22}
-          className="text-slate-400 cursor-pointer"
-          onClick={() => toggleShowPassword()}
-        />
+    <div>
+      {label && (
+        <label className="text-[14px] font-bold text-slate-800 mb-[1px] block">
+          {label}
+        </label>
       )}
+
+      <div className="input-box">
+        <input
+          type={
+            type === "password" ? (showPassword ? "text" : "password") : type
+          }
+          placeholder={placeholder}
+          className="w-full bg-transparent outline-none"
+          value={value}
+          onChange={onChange}
+        />
+
+        {type === "password" && (
+          <>
+            {showPassword ? (
+              <FaRegEye
+                size={22}
+                className="text-primary cursor-pointer"
+                onClick={toggleShowPassword}
+              />
+            ) : (
+              <FaRegEyeSlash
+                size={22}
+                className="text-slate-400 cursor-pointer"
+                onClick={toggleShowPassword}
+              />
+            )}
+          </>
+        )}
+      </div>
     </div>
   );
 };

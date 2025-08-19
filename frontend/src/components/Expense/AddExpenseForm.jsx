@@ -30,7 +30,7 @@ const AddExpenseForm = ({ onAddExpense }) => {
         value={expense.amount}
         onChange={({ target }) => handleChange("amount", target.value)}
         label="Amount"
-        placeholder=""
+        placeholder="₹"
         type="number"
       />
 
@@ -44,7 +44,7 @@ const AddExpenseForm = ({ onAddExpense }) => {
 
       <div className="flex justify-end mt-6">
         <button
-          tyoe="button"
+          type="button"
           className="add-btn add-btn-fill"
           onClick={() => onAddExpense(expense)}
         >
