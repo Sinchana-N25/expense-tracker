@@ -20,6 +20,7 @@ const RecentTransactions = ({ transactions, onSeeMore }) => {
             key={item._id}
             title={item.type === "expense" ? item.category : item.source}
             date={moment(item.date).format("DD MMM YYYY")}
+            icon={item.icon}
             amount={item.amount}
             type={item.type}
             hideDeleteBtn

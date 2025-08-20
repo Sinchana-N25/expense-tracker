@@ -1,10 +1,39 @@
 import React from "react";
 import {
-  LuUtensils,
+  LuLeaf,
+  LuWaves,
+  LuPaperclip,
+  LuMusic,
+  LuStar,
+  LuGift,
+  LuPopsicle,
+  LuPuzzle,
   LuTrendingUp,
   LuTrendingDown,
   LuTrash2,
+  LuOrigami,
+  LuPyramid,
 } from "react-icons/lu";
+
+// Array of icons to randomly pick from
+const randomIcons = [
+  LuLeaf,
+  LuWaves,
+  LuPaperclip,
+  LuPopsicle,
+  LuOrigami,
+  LuPuzzle,
+  LuMusic,
+  LuStar,
+  LuPyramid,
+  LuGift,
+];
+
+const getRandomLuIcon = () => {
+  const IconComponent =
+    randomIcons[Math.floor(Math.random() * randomIcons.length)];
+  return <IconComponent className="w-6 h-6" />;
+};
 
 const TransactionInfoCard = ({
   title,
@@ -24,7 +53,7 @@ const TransactionInfoCard = ({
         {icon ? (
           <img src={icon} alt={title} className="w-6 h-6" />
         ) : (
-          <LuUtensils />
+          getRandomLuIcon()
         )}
       </div>
 
