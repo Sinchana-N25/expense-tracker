@@ -12,22 +12,25 @@ import {
 } from "recharts";
 
 const CustomBarChart = ({ data }) => {
-  //Function to alternate colors
+  // Function to alternate colors
   const getBarColor = (index) => {
     return index % 2 === 0 ? "#875cf5" : "#cfbefb";
   };
 
   const CustomToolTip = ({ active, payload }) => {
     if (active && payload && payload.length) {
+      // payload[0].payload is the current bar's data
+      const barData = payload[0].payload;
+
       return (
         <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
           <p className="text-xs font-semibold text-purple-800 mb-1">
-            {payload[0].payload.category}
+            {barData.category} {/* shows the correct category for THIS bar */}
           </p>
           <p className="text-sm text-gray-600">
             Amount:{" "}
             <span className="text-sm font-medium text-gray">
-              ₹{payload[0].value}
+              ₹{barData.amount} {/* shows the correct amount for THIS bar */}
             </span>
           </p>
         </div>
@@ -46,6 +49,7 @@ const CustomBarChart = ({ data }) => {
             dataKey="month"
             tick={{ fontSize: 12, fill: "#555" }}
             stroke="none"
+            tickFormatter={(val) => val.split("-")[0]} // <-- show only the month part
           />
           <YAxis tick={{ fontSize: 12, fill: "#555" }} stroke="none" />
 

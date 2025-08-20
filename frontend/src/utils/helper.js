@@ -19,7 +19,8 @@ export const addThousandsSeparator = (num) => {
 export const prepareExpenseBarChartData = (data = []) => {
   return data.map((item) => {
     const dateObj = new Date(item.date); // parse ISO date
-    const month = dateObj.toLocaleString("default", { month: "short" }); // e.g., "Aug"
+    const month =
+      dateObj.toLocaleString("default", { month: "short" }) + "-" + item._id;
     return {
       month, // X-axis key expected by CustomBarChart
       category: item.category, // Tooltip
@@ -27,6 +28,7 @@ export const prepareExpenseBarChartData = (data = []) => {
     };
   });
 };
+
 export const prepareIncomeBarChartData = (data = []) => {
   const sortedData = [...data].sort(
     (a, b) => new Date(a.date) - new Date(b.date)
