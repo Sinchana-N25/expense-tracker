@@ -17,30 +17,41 @@ export const addThousandsSeparator = (num) => {
 };
 
 export const prepareExpenseBarChartData = (data = []) => {
-  return data.map((item) => {
-    const dateObj = new Date(item.date); // parse ISO date
-    const month =
-      dateObj.toLocaleString("default", { month: "short" }) + "-" + item._id;
+  return data.map((item, index) => {
+    const dateObj = new Date(item.date);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "short" });
+
+    // Create a unique key but keep the display value as the full date
+    const displayDate = `${day} ${month}`; // e.g., "20 Aug"
+
     return {
-      month, // X-axis key expected by CustomBarChart
-      category: item.category, // Tooltip
-      amount: item.amount, // Bar height
+      xKey: `${displayDate}-${index}`, // unique key internally
+      displayDate, // for X-axis label
+      day,
+      month,
+      category: item.category,
+      amount: item.amount,
     };
   });
 };
 
 export const prepareIncomeBarChartData = (data = []) => {
-  const sortedData = [...data].sort(
-    (a, b) => new Date(a.date) - new Date(b.date)
-  );
+  return data.map((item, index) => {
+    const dateObj = new Date(item.date);
+    const day = dateObj.getDate();
+    const month = dateObj.toLocaleString("default", { month: "short" });
+    const displayDate = `${day} ${month}`;
 
-  const chartData = sortedData.map((item) => ({
-    month: moment(item?.date).format("Do MMM"),
-    source: item?.source,
-    amount: item?.amount,
-  }));
-
-  return chartData;
+    return {
+      xKey: `${displayDate}-${index}`, // unique key internally
+      displayDate, // for X-axis label
+      day,
+      month,
+      category: item.source || "No Source", // <-- use 'source' for income
+      amount: item.amount,
+    };
+  });
 };
 
 export const prepareExpenseLineChartData = (data = []) => {
