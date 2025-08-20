@@ -48,11 +48,10 @@ export const prepareExpenseLineChartData = (data = []) => {
     (a, b) => new Date(a.date) - new Date(b.date)
   );
 
-  const chartData = sortedData.map((item) => ({
-    month: moment(item?.date).format("Do MMM"),
-    category: item?.category,
-    amount: item?.amount,
+  return sortedData.map((item, index) => ({
+    _uniqueKey: `${item.date}-${index}`, // unique for Recharts
+    displayMonth: moment(item.date).format("Do MMM"), // for X-axis
+    category: item.category,
+    amount: item.amount,
   }));
-
-  return chartData;
 };

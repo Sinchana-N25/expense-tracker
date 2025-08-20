@@ -2,31 +2,33 @@ import React, { useEffect, useState } from "react";
 import CustomPieChart from "../Charts/CustomPieChart";
 const COLORS = ["#875CF5", "#FA2C37", "#FF6900", "#4f39f6"];
 
-const RecentIncomeWithChart = ({ data, totalIncome }) => {
+const RecentIncomeWithChart = ({ data }) => {
   const [chartData, setChartData] = useState([]);
-
-  const prepareChartData = () => {
-    const dataArr = data?.map((item) => ({
-      name: item?.source,
-      amount: item?.amount,
-    }));
-    setChartData(dataArr);
-  };
+  const [last60DaysTotal, setLast60DaysTotal] = useState(0);
 
   useEffect(() => {
-    prepareChartData();
-    return () => {};
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const preparedData =
+      data?.map((item) => ({
+        name: item?.source,
+        amount: item?.amount,
+      })) || [];
+
+    setChartData(preparedData);
+
+    const total = preparedData.reduce((sum, item) => sum + item.amount, 0);
+    setLast60DaysTotal(total);
   }, [data]);
+
   return (
     <div className="card">
       <div className="flex items-center justify-between">
         <h5 className="text-lg">Last 60 Days Income</h5>
       </div>
+
       <CustomPieChart
         data={chartData}
-        label="Total Income"
-        totalAmount={`₹${totalIncome}`}
+        label="Last 60 Days"
+        totalAmount={`₹${last60DaysTotal}`} // center now shows sum of last 60 days
         showTextAnchor
         colors={COLORS}
       />

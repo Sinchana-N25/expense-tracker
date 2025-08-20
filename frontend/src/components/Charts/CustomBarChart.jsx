@@ -6,31 +6,27 @@ import {
   YAxis,
   CartesianGrid,
   Tooltip,
-  Legend,
   ResponsiveContainer,
   Cell,
 } from "recharts";
 
 const CustomBarChart = ({ data }) => {
-  // Function to alternate colors
-  const getBarColor = (index) => {
-    return index % 2 === 0 ? "#875cf5" : "#cfbefb";
-  };
+  // Alternate bar colors
+  const getBarColor = (index) => (index % 2 === 0 ? "#875cf5" : "#cfbefb");
 
+  // Custom Tooltip
   const CustomToolTip = ({ active, payload }) => {
     if (active && payload && payload.length) {
-      // payload[0].payload is the current bar's data
-      const barData = payload[0].payload;
-
+      const barData = payload[0].payload; // full data object of this bar
       return (
         <div className="bg-white shadow-md rounded-lg p-2 border border-gray-300">
           <p className="text-xs font-semibold text-purple-800 mb-1">
-            {barData.category} {/* shows the correct category for THIS bar */}
+            {barData.source} {/* category / source */}
           </p>
           <p className="text-sm text-gray-600">
             Amount:{" "}
             <span className="text-sm font-medium text-gray">
-              ₹{barData.amount} {/* shows the correct amount for THIS bar */}
+              ₹{barData.amount} {/* correct amount */}
             </span>
           </p>
         </div>
@@ -49,20 +45,14 @@ const CustomBarChart = ({ data }) => {
             dataKey="month"
             tick={{ fontSize: 12, fill: "#555" }}
             stroke="none"
-            tickFormatter={(val) => val.split("-")[0]} // <-- show only the month part
           />
           <YAxis tick={{ fontSize: 12, fill: "#555" }} stroke="none" />
 
           <Tooltip content={CustomToolTip} />
-          <Bar
-            dataKey="amount"
-            fill="#FF8042"
-            radius={[10, 10, 0, 0]}
-            activeDot={{ r: 8, fill: "yellow" }}
-            activeStyle={{ fill: "green" }}
-          >
+
+          <Bar dataKey="amount" radius={[10, 10, 0, 0]}>
             {data.map((entry, index) => (
-              <Cell key={{ index }} fill={getBarColor(index)} />
+              <Cell key={`cell-${index}`} fill={getBarColor(index)} />
             ))}
           </Bar>
         </BarChart>
