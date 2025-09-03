@@ -1,5 +1,7 @@
 import axios from "axios";
-import { BASE_URL } from "./apiPaths";
+
+// This line is the key change: It reads the base URL from Vite's environment variables.
+const BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL,
@@ -33,9 +35,7 @@ axiosInstance.interceptors.response.use(
     //Handle common errors globally
     if (error.response) {
       console.error("API Error:", error.response.data.message || error.message);
-      //Redirect to login page
-      // window.location.href = "/login";
-    } else if (error.code === "ECONNABORATED") {
+    } else if (error.code === "ECONNABORTED") {
       console.error("Request timeout. Please try again.");
     }
     return Promise.reject(error);
