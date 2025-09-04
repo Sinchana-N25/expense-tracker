@@ -11,6 +11,7 @@ import Home from "./pages/Dashboard/Home";
 import Income from "./pages/Dashboard/Income";
 import Expense from "./pages/Dashboard/Expense";
 import UserProvider from "./context/UserContext";
+import ScrollToTop from "./components/ScrollToTop";
 import { Toaster } from "react-hot-toast";
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
     <UserProvider>
       <div>
         <Router>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<Root />} />
             <Route path="/login" exact element={<Login />} />
