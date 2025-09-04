@@ -52,23 +52,51 @@ exports.deleteIncome = async (req, res) => {
 
 // Download Excel
 exports.downloadIncomeExcel = async (req, res) => {
-  const userId = req.user.id;
   try {
-    const income = await Income.find({ userId }).sort({ date: -1 });
+    const userId = req.user.id;
+    const incomes = await Income.find({ userId }).sort({ date: -1 });
 
-    //Prepare data for Excel
-    const data = income.map((item) => ({
-      Source: item.source,
-      Amount: item.amount,
-      Date: item.date,
+    if (!incomes || incomes.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No income data found to download." });
+    }
+
+    // Prepare data for the worksheet, ensuring correct date formatting
+    const dataForSheet = incomes.map((income) => ({
+      Source: income.source,
+      Amount: income.amount,
+      Date: new Date(income.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
     }));
 
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(data);
-    xlsx.utils.book_append_sheet(wb, ws, "Income");
-    xlsx.writeFile(wb, "income_details.xlsx");
-    res.download("income_details.xlsx");
-  } catch (err) {
-    res.status(500).json({ message: "Server Error" });
+    // Create a new workbook and add the worksheet
+    const workbook = xlsx.utils.book_new();
+    const worksheet = xlsx.utils.json_to_sheet(dataForSheet);
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Income");
+
+    // Write the workbook to a buffer in memory
+    const buffer = xlsx.write(workbook, { bookType: "xlsx", type: "buffer" });
+
+    // Set the headers to prompt a download on the client-side
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=income_details.xlsx"
+    );
+
+    // Send the buffer as the response
+    res.status(200).send(buffer);
+  } catch (error) {
+    console.error("Error generating income Excel file:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while creating Excel file." });
   }
 };

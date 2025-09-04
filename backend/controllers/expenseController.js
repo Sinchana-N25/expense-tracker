@@ -52,23 +52,51 @@ exports.deleteExpense = async (req, res) => {
 
 // Download Excel
 exports.downloadExpenseExcel = async (req, res) => {
-  const userId = req.user.id;
   try {
-    const expense = await Expense.find({ userId }).sort({ date: -1 });
+    const userId = req.user.id;
+    const expenses = await Expense.find({ userId }).sort({ date: -1 });
 
-    //Prepare data for Excel
-    const data = expense.map((item) => ({
-      Category: item.category,
-      Amount: item.amount,
-      Date: item.date,
+    if (!expenses || expenses.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No expense data found to download." });
+    }
+
+    // Prepare data for the worksheet, ensuring correct date formatting
+    const dataForSheet = expenses.map((expense) => ({
+      Category: expense.category,
+      Amount: expense.amount,
+      Date: new Date(expense.date).toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      }),
     }));
 
-    const wb = xlsx.utils.book_new();
-    const ws = xlsx.utils.json_to_sheet(data);
-    xlsx.utils.book_append_sheet(wb, ws, "Expense");
-    xlsx.writeFile(wb, "expense_details.xlsx");
-    res.download("expense_details.xlsx");
-  } catch (err) {
-    res.status(500).json({ message: "Server Error" });
+    // Create a new workbook and add the worksheet
+    const workbook = xlsx.utils.book_new();
+    const worksheet = xlsx.utils.json_to_sheet(dataForSheet);
+    xlsx.utils.book_append_sheet(workbook, worksheet, "Expenses");
+
+    // Write the workbook to a buffer in memory
+    const buffer = xlsx.write(workbook, { bookType: "xlsx", type: "buffer" });
+
+    // Set the headers to prompt a download on the client-side
+    res.setHeader(
+      "Content-Type",
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename=expense_details.xlsx"
+    );
+
+    // Send the buffer as the response
+    res.status(200).send(buffer);
+  } catch (error) {
+    console.error("Error generating expense Excel file:", error);
+    res
+      .status(500)
+      .json({ message: "Server error while creating Excel file." });
   }
 };
