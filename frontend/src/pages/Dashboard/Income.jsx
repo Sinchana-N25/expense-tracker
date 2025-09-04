@@ -107,7 +107,7 @@ const Income = () => {
         }
       );
 
-      //Create a URL for the blob
+      // This code runs only on a successful (200) response
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
@@ -117,8 +117,24 @@ const Income = () => {
       link.parentNode.removeChild(link);
       window.URL.revokeObjectURL(url);
     } catch (error) {
-      console.error("Error downloading income details:", error);
-      toast.error("Failed to download income details. Please try again");
+      // This is the new, smarter error handling
+      if (error.response && error.response.status === 404) {
+        // If it's a 404, the server sent a JSON message inside a blob.
+        // We read the blob to get the specific error message.
+        const errorMessageBlob = error.response.data;
+        try {
+          const errorMessageText = await errorMessageBlob.text();
+          const errorJson = JSON.parse(errorMessageText);
+          toast.error(errorJson.message || "No data available to download.");
+        } catch (error) {
+          toast.error("No data available to download.");
+          console.log(error);
+        }
+      } else {
+        // For all other errors (like a 500 server crash)
+        console.error("Error downloading income details:", error);
+        toast.error("Failed to download income details. Please try again");
+      }
     }
   };
 
